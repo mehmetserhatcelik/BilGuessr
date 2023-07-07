@@ -1,5 +1,6 @@
 package com.example.bilguessr;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -10,15 +11,23 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,27 +37,51 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.bilguessr.databinding.ActivityPhotoAddScreenBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
 
     ActivityResultLauncher<String> permissionLauncher;
+    ActivityResultLauncher<Intent> activityResultLauncher;
     private FirebaseFirestore fstore;
     private FirebaseAuth auth;
     private LocationManager locationManager;
     private LocationListener locationListener;
 
+    Bitmap selectedImage;
+    Uri imageData;
+
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
+
     private double longitude;
     private double latitude;
     private ActivityPhotoAddScreenBinding binding;
+
+    private ImageView iconView;
+    private int difficulty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +90,19 @@ public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallba
         binding = ActivityPhotoAddScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+        iconView = binding.iconImageView;
+        iconView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage(view);
+            }
+        });
+        binding.button.setEnabled(false);
+
+
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -64,6 +110,68 @@ public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallba
         registerLauncher();
         fstore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+        firebaseStorage=FirebaseStorage.getInstance();
+        storageReference=firebaseStorage.getReference();
+    }
+
+    public void selectImage(View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    Snackbar.make(view, "Permission needed for gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give permission", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+                        }
+                    }).show();
+                } else {
+                    permissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+                }
+            } else {
+                Intent intentToGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(intentToGallery);
+            }
+        }else{
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_MEDIA_IMAGES)) {
+                    Snackbar.make(view, "Permission needed for gallery", Snackbar.LENGTH_INDEFINITE).setAction("Give permission", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
+                        }
+                    }).show();
+                } else {
+                    permissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
+                }
+            } else {
+                Intent intentToGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activityResultLauncher.launch(intentToGallery);
+            }
+        }
+    }
+    public void easy(View view)
+    {
+        difficulty = 0;
+        binding.buttoneasy.setEnabled(false);
+        binding.button.setEnabled(true);
+        binding.buttonmedium.setEnabled(true);
+        binding.buttonhard.setEnabled(true);
+    }
+    public void medium(View view)
+    {
+        difficulty = 1;
+        binding.buttonmedium.setEnabled(false);
+        binding.button.setEnabled(true);
+        binding.buttoneasy.setEnabled(true);
+        binding.buttonhard.setEnabled(true);
+    }
+    public void hard(View view)
+    {
+        difficulty = 2;
+        binding.buttonhard.setEnabled(false);
+        binding.button.setEnabled(true);
+        binding.buttoneasy.setEnabled(true);
+        binding.buttonmedium.setEnabled(true);
     }
 
     @Override
@@ -115,6 +223,41 @@ public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallba
     }
     private void registerLauncher()
     {
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if(result.getResultCode()==RESULT_OK){
+                    Intent intentFromResult = result.getData();
+                    if(intentFromResult!=null){
+                        imageData = intentFromResult.getData();
+                        try {
+                            if(Build.VERSION.SDK_INT>=28) {
+                                ImageDecoder.Source source = ImageDecoder.createSource(PhotoAddScreen.this.getContentResolver(), imageData);
+                                selectedImage = ImageDecoder.decodeBitmap(source);
+                                iconView.setImageBitmap(selectedImage);
+                            }
+                            else{
+                                selectedImage=MediaStore.Images.Media.getBitmap(PhotoAddScreen.this.getContentResolver(),imageData);
+                                iconView.setImageBitmap(selectedImage);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+                if(result){
+                    Intent intentToGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    activityResultLauncher.launch(intentToGallery);
+                }else{
+                    Toast.makeText(PhotoAddScreen.this,"Permission needed!",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
             @Override
             public void onActivityResult(Boolean result) {
@@ -137,6 +280,59 @@ public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallba
                 {
                     Toast.makeText(PhotoAddScreen.this, "Permission needed.", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+    }
+    public void addPhoto(View view){
+
+        String imageName = "images/"+(UUID.randomUUID().toString()) + ".png";
+
+
+        storageReference.child(imageName).putFile(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageReference newReference = firebaseStorage.getReference(imageName);
+                newReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+
+                        String downloadUrl = uri.toString();
+
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+                        databaseReference.child("imageURL").setValue(downloadUrl);
+                        HashMap<String,Object> iconData = new HashMap<>();
+
+                        iconData.put("longitude",longitude);
+                        iconData.put("latitude",latitude);
+                        iconData.put("icon",downloadUrl);
+                        iconData.put("difficulty",difficulty);
+
+                        CollectionReference collectionReference = fstore.collection("Photos");
+
+                        collectionReference.add(iconData);
+                        collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                Toast.makeText(PhotoAddScreen.this, "Successfully Uploaded !", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(PhotoAddScreen.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(PhotoAddScreen.this, "Failed to upload", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PhotoAddScreen.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
