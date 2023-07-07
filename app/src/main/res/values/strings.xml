@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BilGuessr</string>
+    <string name="title_activity_photo_add_screen">PhotoAddScreen</string>
+</resources>

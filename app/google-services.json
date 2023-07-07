@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "43681732478",
+    "project_id": "bilguessr",
+    "storage_bucket": "bilguessr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43681732478:android:283c47b77b873e919dc52f",
+        "android_client_info": {
+          "package_name": "com.example.bilguessr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43681732478-ij8712jcflltq934dvm0in2mv2kdvdsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKFHDYnRoxB1L7bABgcnvfrA5eyioOlh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43681732478-ij8712jcflltq934dvm0in2mv2kdvdsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
