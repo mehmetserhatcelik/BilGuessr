@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -16,6 +17,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BilGuessr"
         tools:targetApi="31">
+        <activity
+            android:name=".AdminPanel"
+            android:exported="false" />
+        <activity
+            android:name=".HotPursuitResult"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainScreen"
+            android:exported="true"/>
+        <activity
+            android:name=".Register"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -44,6 +58,9 @@
             android:name=".PhotoAddScreen"
             android:exported="false"
             android:label="@string/title_activity_photo_add_screen" />
+        <activity
+            android:name=".HotPursuit"
+            android:exported="false" />
     </application>
 
 </manifest>

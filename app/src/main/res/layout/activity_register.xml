@@ -3,7 +3,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent" android:layout_height="wrap_content" >
 
-	<ScrollView android:id="@+id/activity_main"
+	<ScrollView android:id="@+id/Register"
 		android:layout_width="wrap_content" 
 		android:layout_height="match_parent" >
 
@@ -13,55 +13,45 @@
 
 
 			<RelativeLayout
-				android:id="@+id/page__17_login_screen_01_ek1"
+				android:id="@+id/page__16_sign_up_screen__ek1"
 				android:layout_width="410dp"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="0dp"
 				android:layout_marginTop="0dp">
 
 				<View
-					android:id="@+id/_bg___17_login_screen_01_ek2"
+					android:id="@+id/_bg___16_sign_up_screen__ek2"
 					android:layout_width="410dp"
 					android:layout_height="812dp"
 					android:layout_marginStart="0dp"
 					android:layout_marginTop="0dp"
-					android:background="@drawable/_bg___17_login_screen_01_ek2_shape" />
+					android:background="@drawable/_bg___16_sign_up_screen__ek2_shape" />
 
 
 				<RelativeLayout
 					android:id="@+id/bg"
-					android:layout_width="410dp"
+					android:layout_width="430dp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="0dp"
-					android:layout_marginTop="-33dp">
-
-					<Switch
-						android:id="@+id/switch1"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginStart="140dp"
-						android:layout_marginTop="650dp"
-						android:text="Remember me" />
-
-				</RelativeLayout>
+					android:layout_marginTop="-33dp"/>
 
 				<RelativeLayout
 					android:id="@+id/text"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="100dp"
+					android:layout_marginStart="130dp"
 					android:layout_marginTop="749dp">
 
 					<TextView
-						android:id="@+id/don_t_have_an_account__join_us"
-						android:layout_width="215dp"
+						android:id="@+id/have_an_account__log_in"
+						android:layout_width="wrap_content"
 						android:layout_height="27dp"
+						android:layout_gravity="center_horizontal|center"
 						android:layout_marginLeft="0dp"
-						android:layout_marginTop="0dp"
-						android:textAlignment="center"
 						android:fontFamily="@font/rway"
-						android:onClick="signUpClicked"
-						android:text="Don’t have an account ? Join us"
+						android:gravity="center"
+						android:onClick="goToLogin"
+						android:text="Have an account? Log in"
 						android:textColor="@color/apptheme"
 						android:textSize="14sp" />
 
@@ -69,23 +59,23 @@
 
 
 				<RelativeLayout
-					android:id="@+id/button"
+					android:id="@+id/den"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="65dp"
-					android:layout_marginTop="536dp">
+					android:layout_marginStart="60dp"
+					android:layout_marginTop="678dp">
 
 					<Button
-						android:id="@+id/rectangle_42"
+						android:id="@+id/button"
 						android:layout_width="295dp"
 						android:layout_height="54dp"
-						android:layout_marginEnd="60dp"
+						android:layout_marginStart="0dp"
 						android:layout_marginTop="0dp"
 						android:background="@drawable/butdeneme"
-						android:text="LogIn"
 						android:textColor="@color/white"
-						android:fontFamily="@font/rway"
-						android:onClick="signInClicked" />
+						android:text="Sıgn Up"
+						android:fontFamily="@font/rwaylight"
+						android:onClick="signUpClicked" />
 
 
 				</RelativeLayout>
@@ -95,8 +85,36 @@
 					android:id="@+id/tab"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="45dp"
-					android:layout_marginTop="378dp">
+					android:layout_marginStart="40dp"
+					android:layout_marginTop="396dp">
+
+
+					<RelativeLayout
+						android:id="@+id/email"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="0dp"
+						android:layout_marginTop="0dp">
+
+
+						<EditText
+							android:padding="10dp"
+							android:id="@+id/userName"
+							android:layout_width="300dp"
+							android:layout_height="56dp"
+							android:layout_alignParentStart="true"
+							android:layout_alignParentTop="true"
+							android:layout_alignParentEnd="true"
+							android:layout_alignParentBottom="true"
+							android:layout_marginEnd="34dp"
+							android:background="@drawable/input"
+
+							android:ems="10"
+							android:hint="  Name and Surname"
+							android:textColorHint="#9BA4B5"
+							android:inputType="textPersonName" />
+
+					</RelativeLayout>
 
 
 					<RelativeLayout
@@ -104,9 +122,11 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_marginStart="0dp"
-						android:layout_marginTop="0dp">
+						android:layout_marginTop="72dp">
 
 						<EditText
+							android:padding="10dp"
+
 							android:id="@+id/emailText"
 							android:layout_width="300dp"
 							android:layout_height="56dp"
@@ -117,18 +137,19 @@
 							android:background="@drawable/input"
 							android:layout_marginEnd="34dp"
 							android:ems="10"
-							android:padding="10dp"
 							android:hint="  Email"
 							android:textColorHint="#9BA4B5"
 							android:inputType="textPersonName" />
 
 					</RelativeLayout>
+
+
 					<RelativeLayout
 						android:id="@+id/password_ek1"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_marginStart="0dp"
-						android:layout_marginTop="80dp">
+						android:layout_marginTop="144dp">
 
 
 						<RelativeLayout
@@ -139,34 +160,32 @@
 							android:layout_marginTop="18dp"
 							android:animationCache="false">
 
+							<ImageView
+								android:id="@+id/imageView3"
+								android:layout_width="20dp"
+								android:layout_marginRight="30dp"
+								android:layout_height="20dp" />
 						</RelativeLayout>
 
 						<EditText
+							android:padding="10dp"
+
 							android:id="@+id/passwordText"
 							android:layout_width="wrap_content"
 							android:layout_height="56dp"
 							android:layout_alignParentStart="true"
+							android:layout_alignParentTop="true"
 							android:layout_alignParentEnd="true"
 							android:layout_alignParentBottom="true"
+							android:layout_marginTop="0dp"
 							android:layout_marginEnd="34dp"
 							android:layout_marginBottom="0dp"
 							android:background="@drawable/input"
-							android:padding="10dp"
 
 							android:ems="10"
 							android:hint="  Password"
-							android:inputType="textPassword"
-							android:textColorHint="#9BA4B5" />
-
-						<ImageView
-							android:id="@+id/imageView2"
-							android:layout_width="22dp"
-							android:layout_height="18dp"
-							android:layout_alignEnd="@+id/passwordText"
-							android:layout_alignParentTop="true"
-							android:layout_marginEnd="8dp"
-							android:layout_marginTop="20dp"
-							app:srcCompat="@drawable/visibleeye" />
+							android:textColorHint="#9BA4B5"
+							android:inputType="textPassword" />
 
 					</RelativeLayout>
 
@@ -177,44 +196,46 @@
 					android:id="@+id/text_ek1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="60dp"
-					android:layout_marginTop="127dp">
+					android:layout_marginStart="50dp"
+					android:layout_marginTop="100dp">
 
 					<TextView
-						android:id="@+id/welcome_back"
-						android:layout_width="190dp"
+						android:id="@+id/join_us_to_start_earning"
+						android:layout_width="304dp"
 						android:layout_height="45dp"
-						android:layout_marginLeft="65dp"
+						android:layout_gravity="center_horizontal|center"
+						android:layout_marginLeft="1dp"
 						android:layout_marginTop="0dp"
+						android:layout_marginBottom="30dp"
 						android:fontFamily="@font/rway"
-						android:text="Welcome Back"
-						android:textColor="@color/black"
+						android:gravity="center"
+						android:text="Join us"
+						android:textColor="#000000"
 						android:textSize="24sp" />
 
 					<TextView
-						android:id="@+id/you_can_search_c_ourse__apply_course_and_find_scholarship_for_abroad_studies"
-						android:layout_width="296dp"
-						android:layout_height="56dp"
+						android:id="@+id/farmease_organizes__manages_and_advises_your_agriculture_related_business_for_you_"
+						android:layout_width="313dp"
+						android:layout_height="79dp"
 						android:layout_gravity="center_horizontal|center"
 						android:layout_marginLeft="-2dp"
-						android:layout_marginTop="36dp"
-						android:fontFamily="@font/rwaylight"
+						android:layout_marginTop="23dp"
+						android:fontFamily="@font/rway"
 						android:gravity="center"
 						android:text="Are you ready to get to know Bilkent campus with your friends while having fun?"
-						android:textColor="@color/black"
+						android:textColor="#677294"
 						android:textSize="14sp" />
 
 				</RelativeLayout>
 
 				<ImageView
-					android:id="@+id/logo_5"
-					android:layout_width="126dp"
+					android:id="@+id/logo_4"
+					android:layout_width="121dp"
 					android:layout_height="126dp"
 					android:layout_marginStart="150dp"
-					android:layout_marginTop="220dp"
-					android:contentDescription="logo_4"
+					android:layout_marginTop="235dp"
+					android:contentDescription="logo"
 					android:src="@drawable/logokare" />
-
 
 			</RelativeLayout>
 		</RelativeLayout>

@@ -15,10 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.ImageDecoder;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,33 +27,27 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.bilguessr.Models.Photo;
+import com.example.bilguessr.databinding.ActivityPhotoAddScreenBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.bilguessr.databinding.ActivityPhotoAddScreenBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
 
 public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
@@ -183,7 +174,7 @@ public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallba
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                SharedPreferences sharedPreferences = PhotoAddScreen.this.getSharedPreferences("com.example.farmease",MODE_PRIVATE);
+                SharedPreferences sharedPreferences = PhotoAddScreen.this.getSharedPreferences("com.example.bilguessr",MODE_PRIVATE);
                 boolean info = sharedPreferences.getBoolean("info",false);
                 if(!info) {
                     LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -300,27 +291,25 @@ public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallba
 
                         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
                         databaseReference.child("imageURL").setValue(downloadUrl);
-                        HashMap<String,Object> iconData = new HashMap<>();
 
-                        iconData.put("longitude",longitude);
+
+                        //HashMap<String,Object> iconData = new HashMap<>();
+
+
+                        /*iconData.put("longitude",longitude);
                         iconData.put("latitude",latitude);
                         iconData.put("icon",downloadUrl);
-                        iconData.put("difficulty",difficulty);
+                        iconData.put("difficulty",difficulty);*/
 
                         CollectionReference collectionReference = fstore.collection("Photos");
 
-                        collectionReference.add(iconData);
-                        collectionReference.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                Toast.makeText(PhotoAddScreen.this, "Successfully Uploaded !", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(PhotoAddScreen.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        collectionReference.add(new Photo(downloadUrl,longitude,latitude,difficulty));
+
+                        Toast.makeText(PhotoAddScreen.this, "Successfully Uploaded !", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(PhotoAddScreen.this, MainScreen.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
