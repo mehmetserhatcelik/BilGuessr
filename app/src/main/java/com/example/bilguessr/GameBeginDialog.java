@@ -12,14 +12,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import java.sql.Time;
+
 public class GameBeginDialog extends AppCompatDialogFragment {
 
     boolean isReady;
     HotPursuit context;
+    TimeRush context2;
+    int type;
 
     public GameBeginDialog(HotPursuit singlePlayer)
     {
         this.context=singlePlayer;
+        type = 0;
+    }
+    public GameBeginDialog(TimeRush singlePlayer)
+    {
+        this.context2=singlePlayer;
+        type =1;
     }
 
     @SuppressLint("MissingInflatedId")
@@ -31,7 +41,11 @@ public class GameBeginDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog, null);
 
-        view.findViewById(R.id.as).setOnClickListener(this::getReady);
+        if(type == 0)
+            view.findViewById(R.id.as).setOnClickListener(this::getReady);
+        else {
+            System.out.println("asd");
+            view.findViewById(R.id.as).setOnClickListener(this::getReady2);}
 
         isReady = false;
         builder.setView(view);
@@ -42,6 +56,13 @@ public class GameBeginDialog extends AppCompatDialogFragment {
         dismiss();
         isReady = true;
         context.pb();
+
+    }
+    public void getReady2(View view)
+    {
+        dismiss();
+        isReady = true;
+        context2.pb();
 
     }
     public boolean isReady()

@@ -63,7 +63,6 @@ import java.util.TimerTask;
 
 public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
-    ActivityResultLauncher<String> permissionLauncher;
 
     private GoogleMap mMap;
 
@@ -71,11 +70,7 @@ public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback,
 
     private FirebaseFirestore fstore;
     private FirebaseAuth auth;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
 
-    Bitmap selectedImage;
-    Uri imageData;
 
     Timer timer;
 
@@ -99,9 +94,12 @@ public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback,
     private ProgressBar pb;
     private int counter;
     private GameBeginDialog calendarDialog;
+    private String ppUrl;
+    private String name;
+    private int prevp;
+    private long record;
 
-    int i;
-    Context context = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,22 +107,22 @@ public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback,
         binding = ActivityHotpursuitBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
+        hideSystemUI();
+        ppUrl = getIntent().getStringExtra("pp");
+        System.out.println(ppUrl);
+        Picasso.get().load(ppUrl).into(binding.pp);
+        name = getIntent().getStringExtra("name");
+        System.out.println(name);
         firebaseStorage = FirebaseStorage.getInstance();
         fstore = FirebaseFirestore.getInstance();
 
         currentQuestionNumber=getIntent().getIntExtra("q",1);
 
         binding.textView.setText(currentQuestionNumber+"/10");
+        totalPoints = getIntent().getIntExtra("point",0);
+        binding.textView2.setText(totalPoints+"");
 
-        if(currentQuestionNumber == 10) {
-            Intent intent = new Intent(HotPursuit.this, HotPursuitResult.class);
-            intent.putExtra("p", totalPoints);
-            startActivity(intent);
-            finish();
-        }
-        else if(currentQuestionNumber == 1)
+        if(currentQuestionNumber == 1)
             openDialog();
         else
             pb();
@@ -139,9 +137,8 @@ public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback,
         counter = 100;
 
         getImage();
-
-        //Toast.makeText(context, photoList.size()+"", Toast.LENGTH_SHORT).show();
-        i=0;
+        prevp =getIntent().getIntExtra("pgained",0);
+        record = getIntent().getLongExtra("record",0);
 
         Thread t = new Thread()
         {
@@ -167,14 +164,31 @@ public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback,
                     }
                 }
                 if(isAnswerLocked == true || isTimeFinished==true) {
-                    currentQuestionNumber++;
-
+                    if(currentQuestionNumber==10)
+                    {
+                        Intent intent = new Intent(HotPursuit.this,HotPursuitEnd.class);
+                        intent.putExtra("total",totalPoints);
+                        intent.putExtra("record",record);
+                        intent.putExtra("pp",ppUrl);
+                        intent.putExtra("name",name);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
                     Intent intent = new Intent(HotPursuit.this, HotPursuitResult.class);
-                    System.out.println(distance());
+                    int temp = calculateDistance();
                     intent.putExtra("q",currentQuestionNumber);
-                    intent.putExtra("d",distance());
+                    intent.putExtra("d",temp);
+                    intent.putExtra("totalpoints",(totalPoints+givePoint(temp)));
+                    intent.putExtra("latitude",latitude);
+                    intent.putExtra("longitude",longitude);
+                    intent.putExtra("photolat",currentPhoto.getLatitude());
+                    intent.putExtra("photolong",currentPhoto.getLongitude());
+                    intent.putExtra("pp",ppUrl);
+                    intent.putExtra("name",name);
+                    intent.putExtra("prevp",prevp);
                     startActivity(intent);
-                    finish();
+                    finish();}
                 }
             }
         };
@@ -206,10 +220,15 @@ public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback,
 
                     photoList.add(photo);
 
-                    Picasso.get().load(photo.getDownloadUrl()).into(binding.imageView);
-                    currentPhoto = photo;
+
+
 
                 }
+                Random random = new Random();
+                int i = random.nextInt(photoList.size());
+                Photo photo = photoList.get(i);
+                Picasso.get().load(photo.getDownloadUrl()).into(binding.imageView);
+                currentPhoto = photo;
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -221,13 +240,36 @@ public class HotPursuit extends AppCompatActivity implements OnMapReadyCallback,
 
 
     }
-    public double distance() {
-        float[] results = new float[1];
-        Location.distanceBetween(currentPhoto.getLatitude(), currentPhoto.getLongitude(),
-                latitude, longitude, results);
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+    public int calculateDistance() {
+        final double EARTH_RADIUS_KM = 6371.0;
+        double dLat = Math.toRadians(currentPhoto.getLatitude() - latitude);
+        double dLon = Math.toRadians(currentPhoto.getLongitude() - longitude);
 
-        System.out.println(results[0]/1000);
-        return results[0]/1000;
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(currentPhoto.getLatitude())) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Distance in kilometers
+        double distance = EARTH_RADIUS_KM * c;
+        System.out.println(distance);
+        return (int)((distance)*1000);
+    }
+    public int givePoint(int distance)
+    {
+        if(distance>1000)
+        {
+            return 0;
+        }
+        return 1000-distance;
     }
 
     public void pb()

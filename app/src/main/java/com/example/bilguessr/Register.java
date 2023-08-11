@@ -8,9 +8,7 @@ import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.Toast;
 
 
@@ -85,13 +83,27 @@ public class Register extends AppCompatActivity {
 
 
 
-                    CollectionReference df = fstore.collection("Users");
+                    FirebaseUser user = auth.getCurrentUser();
+                    DocumentReference df = fstore.collection("Users").document(user.getUid());
 
-                   df.add(new User(0,0,email,name,0,"default"));
+
+                    Map<String,Object> userInfo = new HashMap<>();
+                    userInfo.put("name",binding.userName.getText().toString());
+                    userInfo.put("email",binding.emailText.getText().toString());
+                    userInfo.put("hotPursuitRecord",0);
+                    userInfo.put("timeRushRecord",0);
+                    userInfo.put("isAdmin",0);
+                    userInfo.put("userPhotoUrl","default");
+
+
+
+
+                    df.set(userInfo);
+
 
 
                     Toast.makeText(Register.this,"You successfully signed up.",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(Register.this , MainActivity.class);
+                    Intent intent = new Intent(Register.this , LogInPage.class);
                     startActivity(intent);
                     finish();
                 }
@@ -106,7 +118,7 @@ public class Register extends AppCompatActivity {
     }
     public void goToLogin(View View )
     {
-        Intent intent = new Intent(Register.this , MainActivity.class);
+        Intent intent = new Intent(Register.this , LogInPage.class);
         startActivity(intent);
         finish();
     }

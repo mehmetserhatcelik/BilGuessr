@@ -96,7 +96,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="28dp"
-                android:onClick="logOut"
+                android:onClick="Settings"
                 app:srcCompat="@drawable/settings" />
 
 
@@ -137,6 +137,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/gamelogobutton"
                 android:fontFamily="@font/maioran"
+                android:onClick="lastMan"
                 android:text="Last Man"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -163,6 +164,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/gamelogobutton"
                 android:fontFamily="@font/maioran"
+                android:onClick="Duel"
                 android:text="Duel"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView3"
@@ -185,6 +187,7 @@
             android:textColor="@color/black"
             android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="180dp"
@@ -208,6 +211,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/gamelogobutton"
                 android:fontFamily="@font/maioran"
+                android:onClick="timeRush"
                 android:text="TimeRush"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -234,8 +238,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/gamelogobutton"
                 android:fontFamily="@font/maioran"
-                android:text="HotPursuit"
                 android:onClick="HotPursuit"
+                android:text="HotPursuit"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/imageView7"
                 app:layout_constraintHorizontal_bias="0.848"
@@ -251,10 +255,11 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
-            android:text="Create Lobby"
             android:layout_marginTop="30dp"
             android:background="@drawable/createlobby"
             android:fontFamily="@font/maioran"
+            android:onClick="CreateLobby"
+            android:text="Create Lobby"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         
@@ -284,6 +289,7 @@
                 android:background="@drawable/joinlobby"
                 android:fontFamily="@font/maioran"
                 android:text="Joın Lobby"
+                android:onClick="lobby"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -308,22 +314,25 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:text="HotPursuit Leaderboard"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/createlobby"
                 android:fontFamily="@font/maioran"
+                android:onClick="HotPursuitLeaderboard"
+                android:text="HotPursuit Leaderboard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <Button
                 android:id="@+id/button87"
                 android:layout_width="150dp"
 
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:text="TimeRush Leaderboard"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/createlobby"
                 android:fontFamily="@font/maioran"
+                android:onClick="TimeRushLeaderboard"
+                android:text="TimeRush Leaderboard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -334,7 +343,7 @@
             android:id="@+id/textView122"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your HotPursuit Rank:    #69"
+            android:text="Your HotPursuit Rank:    #60"
             android:fontFamily="@font/lexendlight"
             android:textSize="15sp"
             android:textColor="@color/black"
@@ -344,7 +353,7 @@
             android:id="@+id/textView122q"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your TimeRush Rank:      #31"
+            android:text="Your TimeRush Rank:      #10"
             android:fontFamily="@font/lexendlight"
             android:textSize="15sp"
             android:textColor="@color/black"

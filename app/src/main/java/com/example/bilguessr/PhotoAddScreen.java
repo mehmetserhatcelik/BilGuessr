@@ -307,9 +307,7 @@ public class PhotoAddScreen extends FragmentActivity implements OnMapReadyCallba
 
                         Toast.makeText(PhotoAddScreen.this, "Successfully Uploaded !", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(PhotoAddScreen.this, MainScreen.class);
-                        startActivity(intent);
-                        finish();
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

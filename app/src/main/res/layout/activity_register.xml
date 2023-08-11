@@ -164,28 +164,30 @@
 								android:id="@+id/imageView3"
 								android:layout_width="20dp"
 								android:layout_marginRight="30dp"
-								android:layout_height="20dp" />
+								android:layout_height="20dp"
+								android:background="@drawable/visibleeye"/>
 						</RelativeLayout>
 
 						<EditText
-							android:padding="10dp"
-
 							android:id="@+id/passwordText"
+
 							android:layout_width="wrap_content"
 							android:layout_height="56dp"
 							android:layout_alignParentStart="true"
 							android:layout_alignParentTop="true"
 							android:layout_alignParentEnd="true"
 							android:layout_alignParentBottom="true"
-							android:layout_marginTop="0dp"
+							android:layout_marginStart="0dp"
+							android:layout_marginTop="-1dp"
 							android:layout_marginEnd="34dp"
-							android:layout_marginBottom="0dp"
+							android:layout_marginBottom="1dp"
 							android:background="@drawable/input"
 
 							android:ems="10"
 							android:hint="  Password"
-							android:textColorHint="#9BA4B5"
-							android:inputType="textPassword" />
+							android:inputType="textPassword"
+							android:padding="10dp"
+							android:textColorHint="#9BA4B5" />
 
 					</RelativeLayout>
 
@@ -197,7 +199,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="50dp"
-					android:layout_marginTop="100dp">
+					android:layout_marginTop="220dp">
 
 					<TextView
 						android:id="@+id/join_us_to_start_earning"
@@ -233,9 +235,9 @@
 					android:layout_width="121dp"
 					android:layout_height="126dp"
 					android:layout_marginStart="150dp"
-					android:layout_marginTop="235dp"
+					android:layout_marginTop="60dp"
 					android:contentDescription="logo"
-					android:src="@drawable/logokare" />
+					android:src="@drawable/logo" />
 
 			</RelativeLayout>
 		</RelativeLayout>

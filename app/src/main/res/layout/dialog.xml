@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/dialogback">
 
     <FrameLayout
-        android:layout_width="278dp"
-        android:layout_height="189dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/dialogback"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
